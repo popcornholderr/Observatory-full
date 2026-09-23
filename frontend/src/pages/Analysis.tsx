@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadCloud, File, AlertCircle } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 const PIPELINE_STAGES = [
   'QUEUED',
@@ -27,7 +28,7 @@ export default function Analysis() {
     if (jobId && status !== 'COMPLETED' && status !== 'FAILED') {
       interval = setInterval(async () => {
         try {
-          const res = await fetch(`http://localhost:8000/api/analysis/${jobId}/status`);
+          const res = await fetch(`${API_BASE_URL}/api/analysis/${jobId}/status`);
           const data = await res.json();
           if (data.status) {
             setStatus(data.status.toUpperCase());
@@ -51,7 +52,7 @@ export default function Analysis() {
     formData.append('file', file);
     
     try {
-      const res = await fetch('http://localhost:8000/api/analysis/upload', {
+      const res = await fetch(`${API_BASE_URL}/api/analysis/upload`, {
         method: 'POST',
         body: formData,
       });
