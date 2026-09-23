@@ -1,0 +1,170 @@
+:root {
+  --bg-color: #08080a;
+  --bg-subtle: #121214;
+  --text-main: #e0e0e0;
+  --text-muted: #888888;
+  --accent-color: #ffb84d;
+  --accent-hover: #ffcc80;
+  
+  --glass-bg: rgba(25, 25, 30, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.03);
+}
+
+@keyframes slow-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 184, 77, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 184, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 184, 77, 0); }
+}
+
+@keyframes intro-zoom {
+  0% { transform: scale(1); filter: blur(0px); opacity: 1; }
+  80% { transform: scale(1.5); filter: blur(4px); opacity: 0.8; }
+  100% { transform: scale(2); filter: blur(10px); opacity: 0; }
+}
+
+@keyframes intro-text-fade {
+  0% { opacity: 0; transform: translateY(20px); letter-spacing: 0.1em; }
+  30% { opacity: 1; transform: translateY(0); letter-spacing: 0.3em; }
+  70% { opacity: 1; transform: translateY(0); letter-spacing: 0.3em; }
+  100% { opacity: 0; transform: translateY(-20px); letter-spacing: 0.5em; }
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 184, 77, 0.04), transparent 30%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.03), transparent 30%);
+  background-size: 200% 200%;
+  animation: slow-drift 30s ease infinite;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.high-end-logo {
+  animation: float 6s ease-in-out infinite;
+}
+
+.btn-primary.pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+.glass-panel {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, var(--glass-highlight) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.mono-text {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.btn-primary {
+  background: rgba(255, 184, 77, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(255, 184, 77, 0.3);
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  border-radius: 2px;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: rgba(255, 184, 77, 0.2);
+  border-color: rgba(255, 184, 77, 0.6);
+  color: var(--accent-hover);
+  box-shadow: 0 0 15px rgba(255, 184, 77, 0.1);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  border-radius: 2px;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  margin-top: 0;
+}
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--accent-color);
+}
