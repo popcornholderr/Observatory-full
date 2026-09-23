@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Download, FileText, Loader2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { API_BASE_URL } from '../config';
 
 export default function Results() {
   const { id } = useParams<{ id: string }>();
@@ -15,7 +16,7 @@ export default function Results() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/analysis/${id}/results`);
+        const res = await fetch(`${API_BASE_URL}/api/analysis/${id}/results`);
         if (res.ok) {
           const json = await res.json();
           setData(json);
@@ -76,10 +77,10 @@ export default function Results() {
       
       {/* Header outside of the PDF capture area */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginBottom: '-1rem' }}>
-        <a href={`http://localhost:8000/api/analysis/${id}/export/json`} download className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <a href={`${API_BASE_URL}/api/analysis/${id}/export/json`} download className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Download size={16} /> JSON
         </a>
-        <a href={`http://localhost:8000/api/analysis/${id}/export/csv`} download className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <a href={`${API_BASE_URL}/api/analysis/${id}/export/csv`} download className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Download size={16} /> CSV
         </a>
         <button 
@@ -250,7 +251,7 @@ export default function Results() {
         {visualizations?.waveform && (
           <div className="glass-panel" style={{ padding: '1.5rem' }}>
             <h3 className="mono-text" style={{ margin: '0 0 1.5rem 0' }}>SIGNAL OVERVIEW (WAVEFORM)</h3>
-            <img src={`http://localhost:8000/data/results/${visualizations.waveform}`} alt="Waveform" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+            <img src={`${API_BASE_URL}/data/results/${visualizations.waveform}`} alt="Waveform" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
           </div>
         )}
 
@@ -259,7 +260,7 @@ export default function Results() {
           {visualizations?.fft && (
             <div className="glass-panel" style={{ padding: '1.5rem' }}>
               <h3 className="mono-text" style={{ margin: '0 0 1.5rem 0' }}>FREQUENCY (FFT)</h3>
-              <img src={`http://localhost:8000/data/results/${visualizations.fft}`} alt="FFT" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+              <img src={`${API_BASE_URL}/data/results/${visualizations.fft}`} alt="FFT" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
             </div>
           )}
 
@@ -267,7 +268,7 @@ export default function Results() {
           {visualizations?.spectrogram && (
             <div className="glass-panel" style={{ padding: '1.5rem' }}>
               <h3 className="mono-text" style={{ margin: '0 0 1.5rem 0' }}>SPECTROGRAM (WATERFALL)</h3>
-              <img src={`http://localhost:8000/data/results/${visualizations.spectrogram}`} alt="Spectrogram" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+              <img src={`${API_BASE_URL}/data/results/${visualizations.spectrogram}`} alt="Spectrogram" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
             </div>
           )}
         </div>
@@ -276,7 +277,7 @@ export default function Results() {
         {visualizations?.iq && (
           <div className="glass-panel" style={{ padding: '1.5rem', width: '50%', margin: '0 auto' }}>
             <h3 className="mono-text" style={{ margin: '0 0 1.5rem 0' }}>IQ CONSTELLATION</h3>
-            <img src={`http://localhost:8000/data/results/${visualizations.iq}`} alt="IQ Constellation" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+            <img src={`${API_BASE_URL}/data/results/${visualizations.iq}`} alt="IQ Constellation" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
           </div>
         )}
 
