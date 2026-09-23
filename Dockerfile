@@ -3,7 +3,7 @@
 # need to live in the same image.
 
 # ---- Stage 1: compile the Rust backend ----
-FROM rust:1.82-slim AS rust-builder
+FROM rust:1-slim AS rust-builder
 WORKDIR /build
 RUN apt-get update && apt-get install -y --no-install-recommends pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*
