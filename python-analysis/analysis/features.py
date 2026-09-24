@@ -109,6 +109,21 @@ def extract_parameters(signal_data, sample_rate, detection):
     if detection["signal_present"] and detection["active_duration_sec"] > 0 and detection["active_duration_sec"] < 0.2 and bandwidth > sample_rate * 0.1:
         dispersion_measure = round(350.0 + (bandwidth / sample_rate) * 100, 2)
 
+    # Symbol / Baud rate estimation for digital signals
+    symbol_rate_baud = round(float(bandwidth * 0.8), 1) if (bandwidth > 1000 and (np.iscomplexobj(active_signal) or snr_db > 10)) else None
+
+    # Doppler drift rate estimation across signal halves (Hz/s)
+    doppler_drift_hz_s = 0.0
+    if len(active_signal) > 2048:
+        half_len = len(active_signal) // 2
+        f1, P1 = signal.welch(active_signal[:half_len], fs=sample_rate, nperseg=min(512, half_len), return_onesided=not np.iscomplexobj(active_signal))
+        f2, P2 = signal.welch(active_signal[half_len:], fs=sample_rate, nperseg=min(512, half_len), return_onesided=not np.iscomplexobj(active_signal))
+        dt = max(0.01, (detection["active_duration_sec"] or 1.0) / 2.0)
+        df = abs(f2[np.argmax(P2)] - f1[np.argmax(P1)])
+        doppler_drift_hz_s = round(float(df / dt), 2)
+
+    is_space_domain = bool(doppler_drift_hz_s > 40.0 or dispersion_measure > 0 or (30000 < bandwidth < 60000))
+
     return {
         "center_frequency_hz": float(center_freq),
         "peak_frequency_hz": float(center_freq),
@@ -125,6 +140,9 @@ def extract_parameters(signal_data, sample_rate, detection):
         "thd_db": round(float(thd), 2),
         "sinad_db": round(float(sinad), 2),
         "evm_percent": round(float(evm), 2) if np.iscomplexobj(active_signal) else None,
+        "symbol_rate_baud": symbol_rate_baud,
+        "doppler_drift_hz_s": doppler_drift_hz_s,
+        "is_space_domain": is_space_domain,
         "aliasing_detected": aliasing_detected,
         "anomaly_detected": anomaly_detected,
         "signal_quality_percent": round(float(signal_quality), 1),
