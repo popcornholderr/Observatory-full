@@ -33,12 +33,18 @@ async fn main() {
     let api_routes = routes::api_routes(app_state.clone());
 
     let app = Router::new()
+        .route("/", axum::routing::get(|| async { "Space Radio Signal Analyzer Backend OK" }))
         .nest("/api", api_routes)
         .nest_service("/data", ServeDir::new("../data"))
         .layer(cors)
         .layer(TraceLayer::new_for_http());
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8000));
+    let port: u16 = std::env::var("PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(8000);
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::info!("listening on {}", addr);
     
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
