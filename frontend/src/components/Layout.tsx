@@ -23,10 +23,16 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Radio size={20} color="var(--accent-color)" />
           <span className="mono-text" style={{ fontSize: '0.9rem', letterSpacing: '0.15em', color: 'var(--text-main)' }}>OBSERVATORY</span>
         </Link>
-        <nav style={{ display: 'flex', gap: '3rem' }}>
+        <nav style={{ display: 'flex', gap: '2.5rem' }}>
           <Link to="/analyze" className="mono-text" style={{ 
             color: location.pathname === '/analyze' ? 'var(--accent-color)' : 'var(--text-muted)' 
           }}>ANALYSE</Link>
+          <Link to="/nasa-uplink" className="mono-text" style={{ 
+            color: location.pathname === '/nasa-uplink' ? 'var(--accent-color)' : 'var(--text-muted)' 
+          }}>SPACE SIGNALS</Link>
+          <Link to="/ai-models" className="mono-text" style={{ 
+            color: location.pathname === '/ai-models' ? 'var(--accent-color)' : 'var(--text-muted)' 
+          }}>AI MODELS</Link>
           <Link to="/citizen-science" className="mono-text" style={{ 
             color: location.pathname === '/citizen-science' ? 'var(--accent-color)' : 'var(--text-muted)' 
           }}>CITIZEN SCIENCE</Link>
@@ -52,3 +58,4 @@ export default function Layout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
