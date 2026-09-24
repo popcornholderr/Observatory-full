@@ -22,11 +22,33 @@ pub async fn upload_file(
     let mut filename = String::new();
     let mut file_content = Vec::new();
 
-    while let Some(field) = multipart.next_field().await.unwrap_or(None) {
+    loop {
+        let field = match multipart.next_field().await {
+            Ok(Some(field)) => field,
+            Ok(None) => break,
+            Err(err) => {
+                tracing::error!("multipart read error: {}", err);
+                return (
+                    StatusCode::BAD_REQUEST,
+                    Json(json!({"error": format!("Malformed upload: {}", err)})),
+                )
+                    .into_response();
+            }
+        };
+
         if let Some(name) = field.file_name() {
             filename = name.to_string();
-            let data = field.bytes().await.unwrap();
-            file_content.extend_from_slice(&data);
+            match field.bytes().await {
+                Ok(data) => file_content.extend_from_slice(&data),
+                Err(err) => {
+                    tracing::error!("failed to read multipart field bytes: {}", err);
+                    return (
+                        StatusCode::BAD_REQUEST,
+                        Json(json!({"error": format!("Failed to read uploaded file: {}", err)})),
+                    )
+                        .into_response();
+                }
+            }
         }
     }
 
