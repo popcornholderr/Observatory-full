@@ -1,5 +1,5 @@
 # ---- Stage 1: build the Rust backend ----
-# Pin to Debian Bookworm to match the Python runtime's glibc version
+# Use Debian Bookworm to match the Python runtime's glibc version
 FROM rust:1-bookworm AS builder
 
 WORKDIR /app/backend
@@ -10,15 +10,15 @@ RUN mkdir src && echo "fn main() {}" > src/main.rs && cargo build --release || t
 COPY backend/src ./src
 RUN cargo build --release
 
-# ---- Stage 2: runtime image with Python + the compiled binary ----
-# Use Debian Bookworm to guarantee 100% glibc and ABI compatibility
+# ---- Stage 2: runtime image with Python + compiled binary ----
+# Use Debian Bookworm to ensure 100% glibc and ABI compatibility
 FROM python:3.11-slim-bookworm
 
-# Install runtime system certificates
+# Install certificates
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies for the analysis pipeline
+# Install Python deps for the analysis pipeline
 WORKDIR /app/python-analysis
 COPY python-analysis/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
