@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Download, FileText, Loader2, ArrowLeft, CheckCircle2, AlertTriangle } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { API_BASE_URL } from '../config';
 
 export default function Results() {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,7 @@ export default function Results() {
       // Only attempt remote backend fetch for non-demo job IDs
       if (id && !id.startsWith('demo-')) {
         try {
-          const res = await fetch(`http://localhost:8000/api/analysis/${id}/results`);
+          const res = await fetch(`${API_BASE_URL}/api/analysis/${id}/results`);
           if (res.ok) {
             const json = await res.json();
             if (json && (json.parameters || json.classification)) {
@@ -231,7 +232,7 @@ export default function Results() {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <a href={`http://localhost:8000/api/analysis/${id}/export/csv`} className="btn-secondary" download style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+          <a href={`${API_BASE_URL}/api/analysis/${id}/export/csv`} className="btn-secondary" download style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
             <FileText size={16} />
             <span>EXPORT CSV</span>
           </a>
@@ -474,7 +475,7 @@ export default function Results() {
             </div>
             
             {visualizations?.waveform ? (
-              <img src={`http://localhost:8000/data/results/${visualizations.waveform}`} alt="Waveform" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+              <img src={`${API_BASE_URL}/data/results/${visualizations.waveform}`} alt="Waveform" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
             ) : (
               <div style={{ background: '#050508', borderRadius: '4px', padding: '1.5rem 1rem', height: '140px', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
                 <svg width="100%" height="100" viewBox="0 0 1000 100" preserveAspectRatio="none">
@@ -503,7 +504,7 @@ export default function Results() {
               </div>
 
               {visualizations?.spectrogram ? (
-                <img src={`http://localhost:8000/data/results/${visualizations.spectrogram}`} alt="Spectrogram" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+                <img src={`${API_BASE_URL}/data/results/${visualizations.spectrogram}`} alt="Spectrogram" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
               ) : (
                 <div style={{ background: '#050508', borderRadius: '4px', height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
                   <svg width="100%" height="180" viewBox="0 0 400 180" preserveAspectRatio="none">
@@ -548,7 +549,7 @@ export default function Results() {
               </div>
 
               {visualizations?.iq ? (
-                <img src={`http://localhost:8000/data/results/${visualizations.iq}`} alt="IQ Constellation" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+                <img src={`${API_BASE_URL}/data/results/${visualizations.iq}`} alt="IQ Constellation" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
               ) : metadata?.is_iq ? (
                 <div style={{ background: '#050508', borderRadius: '4px', height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                   <svg width="180" height="180" viewBox="-100 -100 200 200">
