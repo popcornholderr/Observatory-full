@@ -8,7 +8,8 @@ COPY backend/Cargo.toml backend/Cargo.lock* ./
 RUN mkdir src && echo "fn main() {}" > src/main.rs && cargo build --release || true
 
 COPY backend/src ./src
-RUN cargo build --release
+# Bump mtime so cargo rebuilds the real code instead of reusing the dummy main.rs build
+RUN touch src/main.rs && cargo build --release
 
 # ---- Stage 2: runtime image with Python + compiled binary ----
 # Use Debian Bookworm to ensure 100% glibc and ABI compatibility
